@@ -96,7 +96,7 @@ public class UserServiceImpl implements UserService {
 		User usr = userRepository.findByEmailId(emailId);
 		List<Grp> lGrp = null;
 		if (usr != null) {
-			List<Long> lGrpId = usergrpmapRepository.findByUid(usr.getUserId());
+			List<Long> lGrpId = usergrpmapRepository.findGidByUid(usr.getUserId());
 			lGrp = grpRepository.findAllById(lGrpId);
 		}
 		return lGrp;

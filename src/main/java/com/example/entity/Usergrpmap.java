@@ -12,26 +12,29 @@ public class Usergrpmap {
 	private Long mapId;
 	private Long gid;
 	private Long uid;
+
 	public Long getMapId() {
 		return mapId;
 	}
+
 	public void setMapId(Long mapId) {
 		this.mapId = mapId;
 	}
+
 	public Long getGid() {
 		return gid;
 	}
+
 	public void setGid(Long gid) {
 		this.gid = gid;
 	}
+
 	public Long getUid() {
 		return uid;
 	}
+
 	public void setUid(Long uid) {
 		this.uid = uid;
 	}
-	
-	
-	
-	
+
 }

@@ -1,5 +1,7 @@
 package com.example.controller;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -68,10 +70,14 @@ public class UserController {
 
 		return new JWTResponse(token);
 	}
-	
+
 	@PostMapping(value = "/user/addGroup")
 	public Grp addGrp(@RequestBody Grp grp) {
 		return userService.addGroup(grp);
 	}
 
+	@GetMapping("/user/groups")
+	public List<Grp> listGroups(@RequestParam("emailId") String emailId) {
+		return userService.listGroup(emailId);
+	}
 }
