@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -76,8 +77,15 @@ public class UserController {
 		return userService.addGroup(grp);
 	}
 
+	@GetMapping("/user/groups1")
+	public List<Grp> listGroups1(@RequestParam("emailId") String emailId) {
+		return userService.listGroup(emailId);
+	}
+
 	@GetMapping("/user/groups")
-	public List<Grp> listGroups(@RequestParam("emailId") String emailId) {
+	public List<Grp> listGroups() {
+		UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		String emailId = userDetails.getUsername();
 		return userService.listGroup(emailId);
 	}
 }
