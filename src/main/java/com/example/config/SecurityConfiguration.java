@@ -18,10 +18,10 @@ import com.example.service.CustomUserDetailsService;
 @Configuration
 @EnableWebSecurity
 public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
-	
+
 	@Autowired
 	private CustomUserDetailsService customUserDetailsService;
-	
+
 	@Autowired
 	private JWTFilter jwtFilter;
 
@@ -32,19 +32,12 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
-		http
-		.csrf()
-		.disable()
-		.authorizeRequests()
-		.antMatchers("/user/authenticate").permitAll()
-		.antMatchers("/user/registration").permitAll()
-		.anyRequest().authenticated()
-		.and()
-		.sessionManagement()
-		.sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+		http.csrf().disable().authorizeRequests().antMatchers("/user/authenticate").permitAll()
+				.antMatchers("/user/registration").permitAll().anyRequest().authenticated().and().sessionManagement()
+				.sessionCreationPolicy(SessionCreationPolicy.STATELESS);
 		http.addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
 	}
-	
+
 	@Bean
 	public BCryptPasswordEncoder encodePassword() {
 		return new BCryptPasswordEncoder();
@@ -56,9 +49,5 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 		// TODO Auto-generated method stub
 		return super.authenticationManager();
 	}
-	
-	
-	
-	
 
 }

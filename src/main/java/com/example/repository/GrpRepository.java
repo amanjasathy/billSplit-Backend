@@ -1,13 +1,11 @@
 package com.example.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
-
 import org.springframework.stereotype.Repository;
 
-import com.example.entity.User;
+import com.example.entity.Grp;
 
 @Repository
-public interface UserRepository extends JpaRepository<User, Long> {
-	User findByEmailId(String emailId);
+public interface GrpRepository extends JpaRepository<Grp, Long> {
 
 }
