@@ -29,6 +29,7 @@ public class Grp {
 	private String grpType;
 	private String transac;
 	private Integer amt;
+	private Integer transCount;
 
 	@ManyToMany(cascade = CascadeType.ALL)
 	@JoinTable(name = "usergrpmap", joinColumns = @JoinColumn(name = "gid", referencedColumnName = "grpId"), inverseJoinColumns = @JoinColumn(name = "uid", referencedColumnName = "userId"))
@@ -116,6 +117,14 @@ public class Grp {
 	public String toString() {
 		return "Grp [grpId=" + grpId + ", mem1=" + mem1 + ", mem2=" + mem2 + ", mem3=" + mem3 + ", mem4=" + mem4
 				+ ", mem5=" + mem5 + ", grpType=" + grpType + ", transac=" + transac + ", amt=" + amt + "]";
+	}
+
+	public Integer getTransCount() {
+		return transCount;
+	}
+
+	public void setTransCount(Integer transCount) {
+		this.transCount = transCount;
 	}
 
 }

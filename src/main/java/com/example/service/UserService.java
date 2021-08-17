@@ -12,7 +12,9 @@ public interface UserService {
 	public User authenticate(String emailId, String password);
 
 	public Grp addGroup(Grp grp);
-	
+
 	public List<Grp> listGroup(String emailId);
+
+	public String addTransaction(Long grpId, String transaction, Integer amt);
 
 }

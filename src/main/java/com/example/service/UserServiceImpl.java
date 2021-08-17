@@ -1,6 +1,7 @@
 package com.example.service;
 
 import java.util.List;
+import java.util.Optional;
 
 import javax.transaction.Transactional;
 
@@ -86,6 +87,9 @@ public class UserServiceImpl implements UserService {
 			User usr = userRepository.findByEmailId(grp.getMem5());
 			grp.addUser(usr);
 		}
+		grp.setTransac("");
+		grp.setAmt(0);
+		grp.setTransCount(0);
 		grp.setGrpType("DIVIDE");
 
 		return grpRepository.save(grp);
@@ -100,5 +104,14 @@ public class UserServiceImpl implements UserService {
 			lGrp = grpRepository.findAllById(lGrpId);
 		}
 		return lGrp;
+	}
+	
+	public String addTransaction(Long grpId, String transaction, Integer amt) {
+		Optional<Grp> optional=grpRepository.findById(grpId);
+		Grp grp=optional.orElse(null);
+		grp.setTransCount(grp.getTransCount()+1);
+		grp.setTransac(grp.getTransac()+grp.getTransCount()+"."+transaction+" ");
+		grp.setAmt(grp.getAmt()+amt);
+		return "TRANSACTION ADDED";
 	}
 }

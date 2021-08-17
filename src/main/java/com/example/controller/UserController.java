@@ -8,6 +8,7 @@ import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -24,7 +25,8 @@ import com.example.service.UserService;
 import com.example.utility.JWTUtility;
 
 @RestController
-
+//@RequestMapping(value = "/")
+@CrossOrigin
 public class UserController {
 
 	@Autowired
@@ -87,5 +89,11 @@ public class UserController {
 		UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 		String emailId = userDetails.getUsername();
 		return userService.listGroup(emailId);
+	}
+
+	@PutMapping(value = "user/addTransaction")
+	public String addTransaction(@RequestParam("grpId") Long grpId, @RequestParam("transaction") String transaction,
+			@RequestParam("amt") Integer amt) {
+		return userService.addTransaction(grpId, transaction, amt);
 	}
 }
