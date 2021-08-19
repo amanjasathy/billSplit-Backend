@@ -1,11 +1,14 @@
 package com.example.service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
 import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -66,7 +69,9 @@ public class UserServiceImpl implements UserService {
 	}
 
 	public Grp addGroup(Grp grp) {
-
+		UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		String emailId = userDetails.getUsername();
+		grp.setMem1(emailId);
 		if (grp.getMem1() != null) {
 			User usr = userRepository.findByEmailId(grp.getMem1());
 			grp.addUser(usr);
@@ -90,6 +95,7 @@ public class UserServiceImpl implements UserService {
 		grp.setTransac("");
 		grp.setAmt(0);
 		grp.setTransCount(0);
+		grp.setDateTimeCreation(LocalDateTime.now());
 		grp.setGrpType("DIVIDE");
 
 		return grpRepository.save(grp);
@@ -105,13 +111,13 @@ public class UserServiceImpl implements UserService {
 		}
 		return lGrp;
 	}
-	
+
 	public String addTransaction(Long grpId, String transaction, Integer amt) {
-		Optional<Grp> optional=grpRepository.findById(grpId);
-		Grp grp=optional.orElse(null);
-		grp.setTransCount(grp.getTransCount()+1);
-		grp.setTransac(grp.getTransac()+grp.getTransCount()+"."+transaction+" ");
-		grp.setAmt(grp.getAmt()+amt);
+		Optional<Grp> optional = grpRepository.findById(grpId);
+		Grp grp = optional.orElse(null);
+		grp.setTransCount(grp.getTransCount() + 1);
+		grp.setTransac(grp.getTransac() + grp.getTransCount() + "." + transaction + " ");
+		grp.setAmt(grp.getAmt() + amt);
 		return "TRANSACTION ADDED";
 	}
 }

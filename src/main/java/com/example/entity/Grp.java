@@ -1,5 +1,6 @@
 package com.example.entity;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -21,6 +22,8 @@ public class Grp {
 	@SequenceGenerator(name = "grp_sequence", sequenceName = "grp_sequence", allocationSize = 1)
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "grp_sequence")
 	private Long grpId;
+	private String groupName;
+	private LocalDateTime dateTimeCreation;
 	private String mem1;
 	private String mem2;
 	private String mem3;
@@ -125,6 +128,22 @@ public class Grp {
 
 	public void setTransCount(Integer transCount) {
 		this.transCount = transCount;
+	}
+
+	public String getGroupName() {
+		return groupName;
+	}
+
+	public void setGroupName(String groupName) {
+		this.groupName = groupName;
+	}
+
+	public LocalDateTime getDateTimeCreation() {
+		return dateTimeCreation;
+	}
+
+	public void setDateTimeCreation(LocalDateTime dateTimeCreation) {
+		this.dateTimeCreation = dateTimeCreation;
 	}
 
 }
