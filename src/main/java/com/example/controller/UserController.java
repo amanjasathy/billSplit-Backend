@@ -20,13 +20,14 @@ import com.example.entity.Grp;
 import com.example.entity.JWTRequest;
 import com.example.entity.JWTResponse;
 import com.example.entity.User;
+import com.example.exception.SplitBillException;
 import com.example.service.CustomUserDetailsService;
 import com.example.service.UserService;
 import com.example.utility.JWTUtility;
 
 @RestController
 //@RequestMapping(value = "/")
-@CrossOrigin
+@CrossOrigin(origins = "*")
 public class UserController {
 
 	@Autowired
@@ -42,19 +43,20 @@ public class UserController {
 	private UserService userService;
 
 	@GetMapping("/")
-	public String root(@RequestParam("name") String name) {
+	public String root(@RequestParam("name") String name) throws SplitBillException {
 		return "This is Root Page. Hi " + name;
 	}
 
 	@PostMapping(value = "/user/registration")
-	public User userRegistration(@RequestBody User user) {
+	public User userRegistration(@RequestBody User user) throws SplitBillException {
 		System.out.println(user);
 		return userService.registration(user);
 
 	}
 
 	@PutMapping(value = "/authenticate")
-	public User userAuthentication(@RequestParam("emailId") String emailId, @RequestParam("password") String password) {
+	public User userAuthentication(@RequestParam("emailId") String emailId, @RequestParam("password") String password)
+			throws SplitBillException {
 		return userService.authenticate(emailId, password);
 	}
 
@@ -75,17 +77,17 @@ public class UserController {
 	}
 
 	@PostMapping(value = "/user/addGroup")
-	public Grp addGrp(@RequestBody Grp grp) {
+	public Grp addGrp(@RequestBody Grp grp) throws SplitBillException {
 		return userService.addGroup(grp);
 	}
 
 	@GetMapping("/user/groups1")
-	public List<Grp> listGroups1(@RequestParam("emailId") String emailId) {
+	public List<Grp> listGroups1(@RequestParam("emailId") String emailId) throws SplitBillException {
 		return userService.listGroup(emailId);
 	}
 
 	@GetMapping("/user/groups")
-	public List<Grp> listGroups() {
+	public List<Grp> listGroups() throws SplitBillException {
 		UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 		String emailId = userDetails.getUsername();
 		return userService.listGroup(emailId);
@@ -93,7 +95,7 @@ public class UserController {
 
 	@PutMapping(value = "user/addTransaction")
 	public String addTransaction(@RequestParam("grpId") Long grpId, @RequestParam("transaction") String transaction,
-			@RequestParam("amt") Integer amt) {
+			@RequestParam("amt") Integer amt) throws SplitBillException {
 		return userService.addTransaction(grpId, transaction, amt);
 	}
 }

@@ -32,9 +32,10 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
+		//http.cors().disable();
 		http.csrf().disable().authorizeRequests().antMatchers("/user/authenticate").permitAll()
 				.antMatchers("/user/registration").permitAll().anyRequest().authenticated().and().sessionManagement()
-				.sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+				.sessionCreationPolicy(SessionCreationPolicy.STATELESS).and().cors();
 		http.addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
 	}
 

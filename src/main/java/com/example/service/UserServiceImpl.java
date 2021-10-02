@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 
 import com.example.entity.Grp;
 import com.example.entity.User;
+import com.example.exception.SplitBillException;
 import com.example.repository.GrpRepository;
 import com.example.repository.UserRepository;
 import com.example.repository.UsergrpmapRepository;
@@ -43,18 +44,18 @@ public class UserServiceImpl implements UserService {
 //		return null;
 //	}	
 	@Override
-	public User registration(User user) {
+	public User registration(User user) throws SplitBillException {
 		User usr = userRepository.findByEmailId(user.getEmailId());
-		if (usr == null) {
-			String password = user.getPassword();
-			String encryptedpassword = passwordEncoder.encode(password);
-			user.setPassword(encryptedpassword);
-			return userRepository.save(user);
+		if (usr != null) {
+			throw new SplitBillException("User with emailId already exists");
 		}
-		return null;
+		String password = user.getPassword();
+		String encryptedpassword = passwordEncoder.encode(password);
+		user.setPassword(encryptedpassword);
+		return userRepository.save(user);
 	}
 
-	public User authenticate(String emailId, String password) {
+	public User authenticate(String emailId, String password) throws SplitBillException {
 		User usr = userRepository.findByEmailId(emailId);
 		// System.out.println(usr);
 		// System.out.println(emailId);
@@ -68,7 +69,7 @@ public class UserServiceImpl implements UserService {
 		return null;
 	}
 
-	public Grp addGroup(Grp grp) {
+	public Grp addGroup(Grp grp) throws SplitBillException {
 		UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 		String emailId = userDetails.getUsername();
 		grp.setMem1(emailId);
@@ -102,19 +103,20 @@ public class UserServiceImpl implements UserService {
 
 	}
 
-	public List<Grp> listGroup(String emailId) {
+	public List<Grp> listGroup(String emailId) throws SplitBillException {
 		User usr = userRepository.findByEmailId(emailId);
 		List<Grp> lGrp = null;
 		if (usr != null) {
 			List<Long> lGrpId = usergrpmapRepository.findGidByUid(usr.getUserId());
 			lGrp = grpRepository.findAllById(lGrpId);
-		}
+		} else
+			throw new SplitBillException("Invalid emailId");
 		return lGrp;
 	}
 
-	public String addTransaction(Long grpId, String transaction, Integer amt) {
+	public String addTransaction(Long grpId, String transaction, Integer amt) throws SplitBillException {
 		Optional<Grp> optional = grpRepository.findById(grpId);
-		Grp grp = optional.orElse(null);
+		Grp grp = optional.orElseThrow(() -> new SplitBillException("Invalid groupId"));
 		grp.setTransCount(grp.getTransCount() + 1);
 		grp.setTransac(grp.getTransac() + grp.getTransCount() + "." + transaction + " ");
 		grp.setAmt(grp.getAmt() + amt);
